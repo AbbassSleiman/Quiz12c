@@ -1,216 +1,33 @@
 ---
-title: "My title"
-subtitle: "My subtitle if needed"
+title: "The Power and Peril of Models: Understanding Box's Insight on Scientific and Statistical Inquiry"
 author: 
-  - First author
-  - Another author
-thanks: "Code and data are available at: LINK."
+  - Abbass Sleiman
+thanks: "Code is available at: https://github.com/AbbassSleiman/Quiz12c."
 date: today
 date-format: long
-abstract: "First sentence. Second sentence. Third sentence. Fourth sentence."
 format: pdf
+toc: true
 number-sections: true
 bibliography: references.bib
 ---
 
-```{r}
-#| include: false
-#| warning: false
-#| message: false
-
-library(tidyverse)
-library(palmerpenguins)
-```
-
-
 # Introduction
 
-You can and should cross-reference sections and sub-sections. We use @citeR and @rohan.
+In the realm of scientific inquiry, models reign supreme. They act as simplified representations of complex phenomena, offering a lens through which we can understand and predict the natural world. However, a fundamental truth underlies all models: they are inherently wrong. This seemingly paradoxical statement, captured by statistician George Box in his 1976 work "Science and Statistics," highlights a critical concept for scientists – the power and peril of models lie, not in their abilities to perfectly predict, but rather in our ability to discern the nature and significance of their errors. 
 
-The remainder of this paper is structured as follows. @sec-data....
+In this paper, I seek to explore Box's insights on this matter in greater detail by expanding on his ideas and offering a few examples through which one can appreciate Box's underlying message. Note that all the work was done through R [@citeR].
 
+# Box's Insights
 
+Box highlights the inherent limitations of models. By their very nature, they are abstractions, distilling the complexities of reality into a manageable framework, the cost of which includes the exclusion of certain details, leading to inevitable discrepancies between the model and the phenomena they represent. Take a weather model, for instance. Such a model may not predict every gust of wind or perfectly predict the amount of precipitation expected, yet it can still provide valuable insights into large-scale weather patterns. The key lies in recognizing that a model's purpose is not to replicate reality perfectly, but rather to offer a framework for understanding its core dynamics, just as a weather model's underlying purpose is to offer a general guideline to expected daily weather forecasts, and warn us of more detrimental natural disasters.
 
-# Data {#sec-data}
+The true power of models lies in their ability to guide scientific inquiry. However, this power relies on our ability to critically evaluate their shortcomings. Not all deviations from reality are created equal.  Scientists must distinguish between minor discrepancies, attributed to the inherent simplification of models, and major flaws that significantly impact their predictive power. Box emphasizes this point with a powerful metaphor: "[s]ince all models are wrong the scientist must be alert to what is importantly wrong. It is inappropriate to be concerned about mice when there are tigers abroad" [@citeBox]. Focusing on minor, irrelevant errors ("mice") is a pointless exercise that is likely to lead nowhere.  The true scientific endeavor lies in identifying and addressing the most significant deviations ("tigers"), which could stem from flawed fundamental assumptions within the model or limitations in the data used to build it. Such deviations are what truly threaten the validity and usefulness of our models, paving the way towards misinformation and the creation of false narratives and conclusions.
 
-Some of our data is of penguins (@fig-bills), from @palmerpenguins.
+As a result, understanding these "tigers" is crucial across various scientific disciplines. Climate change models, for instance, are constantly being refined. While they might not predict every weather event with perfect accuracy, they are vital for understanding long-term trends in global temperatures and potential environmental impacts of rising greenhouse gas emissions.  In this context, scientists are more concerned with accurately representing factors like ocean circulation and atmospheric interactions (the "tigers") than minor variations in humidity (the "mice"). Similarly, in drug development, models are used to predict how drugs might react in the human body. Here, the focus is on identifying potential toxicities or inefficiencies (the "tigers") rather than getting caught up in minor side effects that can be managed (the "mice").
 
-```{r}
-#| label: fig-bills
-#| fig-cap: Bills of penguins
-#| echo: false
+# Conclusion 
 
-ggplot(penguins, aes(x = island, fill = species)) +
-  geom_bar(alpha = 0.8) +
-  scale_fill_manual(values = c("darkorange","purple","cyan4"),
-                    guide = "none") +
-  theme_minimal() +
-  facet_wrap(~species, ncol = 1) +
-  coord_flip()
-```
-
-Talk more about it.
-
-And also planes (@fig-planes). (You can change the height and width, but don't worry about doing that until you have finished every other aspect of the paper - Quarto will try to make it look nice and the defaults usually work well once you have enough text.)
-
-```{r}
-#| label: fig-planes
-#| fig-cap: Relationship between wing length and width
-#| echo: false
-#| warning: false
-#| message: false
-
-analysis_data <- read_csv(here::here("data/analysis_data/analysis_data.csv"))
-
-analysis_data |> 
-  ggplot(aes(x = width, y = length)) +
-  geom_point(alpha = 0.8) +
-  theme_minimal() +
-  labs(x = "Wing width (mm)",
-       y = "Wing length (mm)")
-```
-
-Talk way more about it. 
-
-
-
-# Model
-
-The goal of our modelling strategy is twofold. Firstly,...
-
-Here we briefly describe the Bayesian analysis model used to investigate... Background details and diagnostics are included in [Appendix -@sec-model-details].
-
-## Model set-up
-
-Define $y_i$ as the number of seconds that the plane remained aloft. Then $\beta_i$ is the wing width and $\gamma_i$ is the wing length, both measured in millimeters.  
-
-\begin{align} 
-y_i|\mu_i, \sigma &\sim \mbox{Normal}(\mu_i, \sigma) \\
-\mu_i &= \alpha + \beta_i + \gamma_i\\
-\alpha &\sim \mbox{Normal}(0, 2.5) \\
-\beta &\sim \mbox{Normal}(0, 2.5) \\
-\gamma &\sim \mbox{Normal}(0, 2.5) \\
-\sigma &\sim \mbox{Exponential}(1)
-\end{align}
-
-We run the model in R [@citeR] using the `rstanarm` package of @rstanarm. We use the default priors from `rstanarm`.
-
-
-### Model justification
-
-We expect a positive relationship between the size of the wings and time spent aloft. In particular...
-
-We can use maths by including latex between dollar signs, for instance $\theta$.
-
-
-# Results
-
-Our results are summarized in @tbl-modelresults.
-
-```{r}
-#| echo: false
-#| eval: true
-#| warning: false
-#| message: false
-
-library(rstanarm)
-
-first_model <-
-  readRDS(file = here::here("models/first_model.rds"))
-```
-
-```{r}
-#| echo: false
-#| eval: true
-#| label: tbl-modelresults
-#| tbl-cap: "Explanatory models of flight time based on wing width and wing length"
-#| warning: false
-
-modelsummary::modelsummary(
-  list(
-    "First model" = first_model
-  ),
-  statistic = "mad",
-  fmt = 2
-)
-```
-
-
-
-
-# Discussion
-
-## First discussion point {#sec-first-point}
-
-If my paper were 10 pages, then should be be at least 2.5 pages. The discussion is a chance to show off what you know and what you learnt from all this. 
-
-## Second discussion point
-
-## Third discussion point
-
-## Weaknesses and next steps
-
-Weaknesses and next steps should also be included.
-
-\newpage
-
-\appendix
-
-# Appendix {-}
-
-
-# Additional data details
-
-# Model details {#sec-model-details}
-
-## Posterior predictive check
-
-In @fig-ppcheckandposteriorvsprior-1 we implement a posterior predictive check. This shows...
-
-In @fig-ppcheckandposteriorvsprior-2 we compare the posterior with the prior. This shows... 
-
-```{r}
-#| eval: true
-#| echo: false
-#| message: false
-#| warning: false
-#| label: fig-ppcheckandposteriorvsprior
-#| layout-ncol: 2
-#| fig-cap: "Examining how the model fits, and is affected by, the data"
-#| fig-subcap: ["Posterior prediction check", "Comparing the posterior with the prior"]
-
-pp_check(first_model) +
-  theme_classic() +
-  theme(legend.position = "bottom")
-
-posterior_vs_prior(first_model) +
-  theme_minimal() +
-  scale_color_brewer(palette = "Set1") +
-  theme(legend.position = "bottom") +
-  coord_flip()
-```
-
-## Diagnostics
-
-@fig-stanareyouokay-1 is a trace plot. It shows... This suggests...
-
-@fig-stanareyouokay-2 is a Rhat plot. It shows... This suggests...
-
-```{r}
-#| echo: false
-#| eval: true
-#| message: false
-#| warning: false
-#| label: fig-stanareyouokay
-#| fig-cap: "Checking the convergence of the MCMC algorithm"
-#| fig-subcap: ["Trace plot", "Rhat plot"]
-#| layout-ncol: 2
-
-plot(first_model, "trace")
-
-plot(first_model, "rhat")
-```
-
+By acknowledging the limitations of models and focusing on the most critical errors, we unlock their true potential as powerful tools for scientific inquiry. Models allow us to explore alternative scenarios, test hypotheses, and identify key relationships within complex systems. They enable us to make predictions that aid in advancing humanity by providing us with the capacity to make more informed decisions. However, this power comes with the responsibility of critical evaluation. As Box reminds us, the most valuable use of a model lies not in blindly accepting its every prediction, but in understanding the nature and significance of its errors. This awareness aids us in refining our models, identifying new areas of research and, ultimately, achieving a deeper understanding of the world around us.
 
 
 \newpage
